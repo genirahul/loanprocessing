@@ -14,8 +14,8 @@ func main() {
 
 	v1 := r.Group("/loan/v1.0/")
 	{
-		v1.GET("/start", handler.StartLoan)
-		v1.GET("/add-payment", handler.AddBalance)
+		v1.POST("/start", handler.StartLoan)
+		v1.PATCH("/add-payment", handler.AddPayment)
 		v1.GET("/get-balance", handler.GetBalance)
 	}
 
