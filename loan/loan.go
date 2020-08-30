@@ -10,17 +10,17 @@ import (
 
 // Loan stores details of the loan that is processed currently.
 type Loan struct {
-	Principal   float64     `json:"initialAmount"`
-	Rate        float32     `json:"annualRate"`
-	StartDate   custom.Date `json:"startDate"`
+	Principal   float64     `json:"initialAmount" binding:"required,numeric,min=1"`
+	Rate        float32     `json:"annualRate" binding:"required,numeric,min=1"`
+	StartDate   custom.Date `json:"startDate" binding:"required"`
 	Payments    []Installment
 	Adjustments []adjustment
 }
 
 // Installment store load payment details.
 type Installment struct {
-	Amount float64     `json:"amount"`
-	Date   custom.Date `json:"date"`
+	Amount float64     `json:"amount" binding:"required,numeric,min=1"`
+	Date   custom.Date `json:"date" binding:"required"`
 }
 
 type adjustment struct {

@@ -22,9 +22,11 @@ func StartLoan(c *gin.Context) {
 	l := loan.GetLoanInstance(true)
 	e := c.BindJSON(l)
 	if e != nil {
-		sendErrorResponse(c, http.StatusBadRequest, "StartLoan :: "+e.Error())
+		msgs := customErrMsg(e)
+		sendErrorResponse(c, http.StatusBadRequest, "StartLoan :: "+msgs)
 		return
 	}
+
 	l.Start()
 	fmt.Println("Payment:", l.Principal, "Rate :", l.Rate, "Start Date:", time.Time(l.StartDate))
 	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "message": "Loan Started Successfully"})
@@ -41,7 +43,8 @@ func AddPayment(c *gin.Context) {
 	installment := loan.NewInstallment()
 	e := c.BindJSON(&installment)
 	if e != nil {
-		sendErrorResponse(c, http.StatusBadRequest, "AddPayment :: "+e.Error())
+		msgs := customErrMsg(e)
+		sendErrorResponse(c, http.StatusBadRequest, "AddPayment :: "+msgs)
 		return
 	}
 
@@ -64,9 +67,13 @@ func GetBalance(c *gin.Context) {
 	}
 	params := c.Request.URL.Query()
 	dateStr := params.Get("date")
+	if len(dateStr) == 0 {
+		sendErrorResponse(c, http.StatusBadRequest, "GetBalance :: date is required in yyyy-mm-dd format")
+		return
+	}
 	date, e := custom.Parse(dateStr)
 	if e != nil {
-		sendErrorResponse(c, http.StatusBadRequest, "GetBalance :: Error while binding :"+e.Error())
+		sendErrorResponse(c, http.StatusBadRequest, "GetBalance :: provide date as yyyy-mm-dd (2006-01-02)")
 		return
 	}
 	bal, err := l.GetBalance(date)
@@ -80,7 +87,7 @@ func GetBalance(c *gin.Context) {
 }
 
 func sendErrorResponse(c *gin.Context, status int, e string) {
-	fmt.Println("ERROR ::", e)
+	// fmt.Println("ERROR ::", e)
 	c.JSON(status, gin.H{"status": status, "message": e})
 	c.Abort()
 }
