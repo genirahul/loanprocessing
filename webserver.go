@@ -19,5 +19,5 @@ func main() {
 		v1.GET("/get-balance", handler.GetBalance)
 	}
 
-	r.Run("127.0.0.1:8080")
+	r.Run(":80")
 }

@@ -13,7 +13,7 @@ import (
 // Health Return ok if server is healthy
 func Health(c *gin.Context) {
 	fmt.Println("Service healthy")
-	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "message": "Service is healthy!"})
+	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "message": "Loan service is healthy!"})
 }
 
 // StartLoan Start new loan.
